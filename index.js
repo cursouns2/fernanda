@@ -22,12 +22,31 @@ db.connect((err) => {
 
 // Configuración de la ruta
 app.get('/', (req, res) => {
-  db.query('SELECT * FROM empleados', (err, results) => {
+  db.query('SELECT * FROM Personas', (err, results) => {
     if (err) {
       res.status(500).send('Error en la consulta de la base de datos');
       return;
     }
-    res.json(results); // Muestra los resultados en formato JSON
+    
+    // Crear tabla HTML
+    let html = '<h1>Datos de la Tabla Personas</h1>';
+    html += '<table border="1"><tr><th>ID</th><th>Nombre</th><th>Apellido</th><th>Edad</th><th>Teléfono</th></tr>';
+    
+    // Recorrer los resultados y agregarlos a la tabla
+    results.forEach(person => {
+      html += `<tr>
+                <td>${person.id}</td>
+                <td>${person.nombre}</td>
+                <td>${person.apellido}</td>
+                <td>${person.edad}</td>
+                <td>${person.telefono}</td>
+               </tr>`;
+    });
+    
+    html += '</table>';
+    
+    // Enviar la respuesta con el HTML
+    res.send(html);
   });
 });
 
